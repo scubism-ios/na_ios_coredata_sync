@@ -25,7 +25,7 @@
             mo.modified_date_for_sync = [[mo class] modifiedDateInServerItemData:data];
             mo.edited_data_for_sync = nil;
             mo.sync_state_for_sync = NASyncModelSyncStateSYNCED;
-            [mo updateByServerItemData:data context:context];
+            [mo updateByJSON:data context:context];
             break;
         case NASyncModelConflictOptionLocalPriority:
             //            local priority
@@ -56,7 +56,7 @@
             [newData addEntriesFromDictionary:mo.edited_data_for_sync];
             mo.data_for_sync = newData;
             mo.modified_date_for_sync = [[mo class] modifiedDateInServerItemData:data];
-            [mo updateByServerItemData:data context:context];
+            [mo updateByJSON:data context:context];
             [mo sync_update:query.maskType options:nil complete:nil];
             break;
         }
@@ -75,13 +75,14 @@
             //                no conflict
             mo.sync_state_for_sync = NASyncModelSyncErrorNone;
             mo.sync_state_for_sync = NASyncModelSyncStateSYNCED;
-            mo.data_for_sync = data;
-            mo.modified_date_for_sync = [[mo class] modifiedDateInServerItemData:data];
-            mo.edited_data_for_sync = nil;
-            if([[mo class] enabled_auto_delete_management]){
-                mo.is_deleted_for_sync = [[mo class] isDeletedKeyInServerItemData:data];
-            }
-            [mo updateByServerItemData:data context:context];
+//            mo.data_for_sync = data;
+//            mo.modified_date_for_sync = [[mo class] modifiedDateInServerItemData:data];
+//            mo.edited_data_for_sync = nil;
+//            if([[mo class] enabled_auto_delete_management]){
+//                mo.is_deleted_for_sync = [[mo class] isDeletedKeyInServerItemData:data];
+//            }
+//            [mo updateByServerItemData:data context:context];
+            [super _updateByServerItemData:data mo:mo context:context];
         }else{
             if([[mo modified_date_for_sync] compare:[[mo class] modifiedDateInServerItemData:data]] == NSOrderedAscending){
                 //                    ローカルで検知したコンフリクト
